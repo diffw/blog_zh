@@ -1,0 +1,18 @@
+{{ define "main" }}
+  <section class="page-intro">
+    <h1>{{ site.Title }}</h1>
+    <p>从 WordPress 迁移到 Hugo 的中文博客归档。</p>
+  </section>
+
+  <section class="year-group">
+    <h2>最近文章</h2>
+    <ul class="post-list">
+      {{ range first 20 (where site.RegularPages "Section" "posts").ByDate.Reverse }}
+        <li>
+          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
+          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </li>
+      {{ end }}
+    </ul>
+  </section>
+{{ end }}

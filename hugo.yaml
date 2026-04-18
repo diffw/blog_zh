@@ -1,0 +1,19 @@
+baseURL: https://diff.im/
+title: Diff客旅日记
+defaultContentLanguage: zh-cn
+timeZone: America/Chicago
+enableRobotsTXT: true
+
+frontmatter:
+  date:
+    - date
+  lastmod:
+    - lastmod
+  publishDate:
+    - publishDate
+
+permalinks:
+  page:
+    posts: /blog/:year/:month/:slug/
+  section:
+    posts: /blog/
