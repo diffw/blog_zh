@@ -48,6 +48,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--no-push", action="store_true", help="Skip git push after committing")
     parser.add_argument("--dry-run", action="store_true", help="Preview sync actions without writing files")
+    parser.add_argument(
+        "--allow-empty",
+        action="store_true",
+        help="Allow syncing zero publishable posts and removing existing content/posts files",
+    )
     return parser.parse_args()
 
 
@@ -113,6 +118,14 @@ def iter_source_posts(source_dir: Path) -> tuple[list[SourcePost], list[str]]:
     return posts, skipped
 
 
+def source_markdown_files(source_dir: Path) -> list[Path]:
+    return [
+        path
+        for path in sorted(source_dir.glob("*.md"))
+        if path.name not in IGNORED_FILENAMES and not path.name.startswith(".")
+    ]
+
+
 def ensure_content_index(content_dir: Path) -> None:
     content_dir.mkdir(parents=True, exist_ok=True)
     index_path = content_dir / "_index.md"
@@ -165,9 +178,32 @@ def copy_publishable_posts(posts: list[SourcePost], content_dir: Path, dry_run: 
     return copied
 
 
-def sync_posts(source_dir: Path, content_dir: Path, dry_run: bool = False) -> SyncResult:
+def sync_posts(
+    source_dir: Path,
+    content_dir: Path,
+    dry_run: bool = False,
+    allow_empty: bool = False,
+) -> SyncResult:
+    if not source_dir.exists():
+        raise RuntimeError(f"Source directory does not exist: {source_dir}")
+
     ensure_content_index(content_dir)
+    source_files = source_markdown_files(source_dir)
     posts, skipped = iter_source_posts(source_dir)
+
+    if not allow_empty and not posts:
+        if source_files:
+            raise RuntimeError(
+                "Refusing to sync zero publishable posts. "
+                "Check front matter or pass --allow-empty if you really want to clear the site."
+            )
+        existing_posts = [path for path in content_dir.glob("*.md") if path.name != "_index.md"]
+        if existing_posts:
+            raise RuntimeError(
+                "Refusing to clear existing content/posts because no source markdown files were found. "
+                "Pass --allow-empty if this is intentional."
+            )
+
     desired = {post.source_path.name for post in posts}
     removed = remove_stale_entries(content_dir, desired, dry_run=dry_run)
     copied = copy_publishable_posts(posts, content_dir, dry_run=dry_run)
@@ -214,8 +250,14 @@ def publish_once(
     commit_message: str,
     push: bool,
     dry_run: bool,
+    allow_empty: bool,
 ) -> int:
-    result = sync_posts(source_dir=source_dir, content_dir=content_dir, dry_run=dry_run)
+    result = sync_posts(
+        source_dir=source_dir,
+        content_dir=content_dir,
+        dry_run=dry_run,
+        allow_empty=allow_empty,
+    )
 
     print(f"Publishable posts: {len(result.published)}")
     print(f"Copied/updated: {len(result.copied)}")
@@ -253,6 +295,7 @@ def main() -> int:
         commit_message=args.commit_message,
         push=not args.no_push,
         dry_run=args.dry_run,
+        allow_empty=args.allow_empty,
     )
 
 

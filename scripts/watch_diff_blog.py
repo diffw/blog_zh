@@ -86,6 +86,7 @@ class DebouncePublisher(FileSystemEventHandler):
                     commit_message=self.commit_message,
                     push=self.push,
                     dry_run=False,
+                    allow_empty=False,
                 )
             except Exception as exc:
                 print(f"[watch] publish failed: {exc}")

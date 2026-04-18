@@ -82,6 +82,22 @@ class PublishFromObsidianTests(unittest.TestCase):
             self.assertIn("stale.md", result.removed)
             self.assertIn("2008/old.md", result.removed)
 
+    def test_sync_refuses_to_clear_existing_content_when_no_publishable_posts_are_found(self) -> None:
+        with tempfile.TemporaryDirectory() as tempdir:
+            root = Path(tempdir)
+            source = root / "source"
+            content = root / "content" / "posts"
+            source.mkdir(parents=True)
+            content.mkdir(parents=True)
+            (content / "_index.md").write_text("---\ntitle: \"博客\"\n---\n", encoding="utf-8")
+            (content / "published.md").write_text("published", encoding="utf-8")
+            write_markdown(source / "draft.md", title="Draft", draft=True)
+
+            with self.assertRaisesRegex(RuntimeError, "Refusing to sync zero publishable posts"):
+                sync_posts(source, content)
+
+            self.assertTrue((content / "published.md").exists())
+
     def test_stage_and_commit_content_only_commits_content_posts(self) -> None:
         with tempfile.TemporaryDirectory() as tempdir:
             repo = Path(tempdir) / "repo"
