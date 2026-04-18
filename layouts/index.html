@@ -20,8 +20,11 @@
     <ul class="archive-list">
       {{ range first 14 $posts }}
         <li class="archive-item">
-          <a class="archive-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "Jan 2" }}</time>
+          <a class="archive-link" href="{{ .RelPermalink }}">
+            <span class="archive-title">{{ .Title }}</span>
+            <span class="archive-rule" aria-hidden="true"></span>
+            <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+          </a>
         </li>
       {{ end }}
     </ul>
