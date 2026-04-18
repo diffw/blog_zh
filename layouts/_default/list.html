@@ -1,25 +1,29 @@
 {{ define "main" }}
   {{ $pages := .Pages.ByDate.Reverse }}
-  <section class="page-intro page-intro--archive">
-    <p class="eyebrow">归档</p>
-    <h1>全部文章</h1>
-    <p class="page-copy">所有文章按年份整理，方便顺着时间往回读。</p>
+  <section class="block">
+    <h1 class="h1" style="margin-bottom: 8px;">全部文章</h1>
+    <div class="mute" style="font-size: 13px;">
+      {{ len $pages }} 篇文章 &middot; 2020 &ndash; {{ now.Year }}
+    </div>
   </section>
 
-  {{ range $pages.GroupByDate "2006" }}
-    <section class="archive-block">
-      <h2 class="year-heading">{{ .Key }}</h2>
-      <ul class="archive-list">
-        {{ range .Pages.ByDate.Reverse }}
-          <li class="archive-item">
-            <a class="archive-link" href="{{ .RelPermalink }}">
-              <span class="archive-title">{{ .Title }}</span>
-              <span class="archive-rule" aria-hidden="true"></span>
-              <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "1月2日" }}</time>
+  <section style="padding-bottom: 48px;">
+    {{ range $pages.GroupByDate "2006" }}
+      <div>
+        <div class="year-head">
+          <div class="y">{{ .Key }}</div>
+          <div class="count">{{ len .Pages }}</div>
+        </div>
+        <div class="post-list">
+          {{ range .Pages.ByDate.Reverse }}
+            {{ $d := .Date }}
+            <a class="post-row" href="{{ .RelPermalink }}">
+              <span class="date">{{ $d.Format "01.02" }}</span>
+              <span class="title">{{ .Title }}</span>
             </a>
-          </li>
-        {{ end }}
-      </ul>
-    </section>
-  {{ end }}
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
+  </section>
 {{ end }}

@@ -1,17 +1,14 @@
 {{ define "main" }}
-  <section class="page-intro page-intro--archive">
-    <p class="eyebrow">标签</p>
-    <h1>{{ .Title }}</h1>
+  <section class="block">
+    <h1 class="h1" style="margin-bottom: 8px;">{{ .Title }}</h1>
   </section>
-  <ul class="archive-list">
+  <section style="padding-bottom: 48px;">
     {{ range .Pages.ByDate.Reverse }}
-      <li class="archive-item">
-        <a class="archive-link" href="{{ .RelPermalink }}">
-          <span class="archive-title">{{ .Title }}</span>
-          <span class="archive-rule" aria-hidden="true"></span>
-          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "1月2日" }}</time>
-        </a>
-      </li>
+      {{ $d := .Date }}
+      <a class="post-row" href="{{ .RelPermalink }}">
+        <span class="date">{{ $d.Format "06.01.02" }}</span>
+        <span class="title">{{ .Title }}</span>
+      </a>
     {{ end }}
-  </ul>
+  </section>
 {{ end }}

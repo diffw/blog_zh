@@ -6,30 +6,70 @@
     <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
     <link rel="canonical" href="{{ .Permalink }}">
     {{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
+    <script>
+      (function(){
+        if (localStorage.getItem('diff.dark') === 'true') {
+          document.documentElement.setAttribute('data-dark', 'true');
+        }
+      })();
+    </script>
   </head>
   <body>
     {{ $current := .RelPermalink }}
-    <header class="site-header">
-      <div class="container">
-        <a class="site-title" href="{{ "" | absURL }}">{{ site.Title }}</a>
-        <nav class="site-nav">
-          <a class="{{ if eq $current ("/" | relLangURL) }}is-active{{ end }}" href="{{ "" | absURL }}">首页</a>
-          <a class="{{ if or (eq .Section "posts") (eq $current ("/blog/" | relLangURL)) }}is-active{{ end }}" href="{{ "blog/" | absURL }}">blog</a>
-          <a class="{{ if eq $current ("/about/" | relLangURL) }}is-active{{ end }}" href="{{ "about/" | absURL }}">介绍</a>
-          <a class="{{ if eq $current ("/now/" | relLangURL) }}is-active{{ end }}" href="{{ "now/" | absURL }}">Now</a>
-          <a class="{{ if eq $current ("/projects/" | relLangURL) }}is-active{{ end }}" href="{{ "projects/" | absURL }}">项目</a>
-          <a class="{{ if eq $current ("/links/" | relLangURL) }}is-active{{ end }}" href="{{ "links/" | absURL }}">链接</a>
+    {{ $section := .Section }}
+    <div class="shell">
+      <main class="content fade-in">
+        {{ block "main" . }}{{ end }}
+        <footer class="content-foot">&copy; 2020 &ndash; {{ now.Year }}</footer>
+      </main>
+
+      <aside class="sidebar">
+        <a class="brand" href="{{ "" | absURL }}">
+          <svg class="logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Diff">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1817 22.6075C13.1817 24.6974 11.4815 26.3976 9.39167 26.3976C7.30185 26.3976 5.60165 24.6974 5.60165 22.6075C5.60165 20.5177 7.30185 18.8175 9.39167 18.8175H13.1817V22.6075ZM32 5.60263V0H13.1817V13.2147H9.39173C8.12497 13.2147 6.8946 13.4634 5.73482 13.954C4.61605 14.4272 3.61182 15.1041 2.75014 15.9658C1.88842 16.8275 1.21156 17.8316 0.738368 18.9505C0.247808 20.1102 -0.000915527 21.3406 -0.000915527 22.6074C-0.000915527 23.8741 0.247808 25.1045 0.738368 26.2643C1.21156 27.3831 1.88842 28.3873 2.75014 29.2489C3.61182 30.1107 4.61605 30.7875 5.73482 31.2607C6.8946 31.7513 8.12497 32 9.39173 32C10.6585 32 11.8889 31.7513 13.0486 31.2607C14.1674 30.7875 15.1716 30.1107 16.0333 29.2489C16.895 28.3873 17.5719 27.3831 18.0451 26.2643C18.5356 25.1045 18.7844 23.8741 18.7844 22.6074V18.7853H32V13.1827H18.7844V5.60263H32Z" fill="#FF7F83"/>
+          </svg>
+        </a>
+
+        <nav class="side-nav">
+          <a class="{{ if .IsHome }}is-active{{ end }}" href="{{ "" | absURL }}">首页</a>
+          <a class="{{ if or (eq $section "posts") (eq $current ("/blog/" | relURL)) }}is-active{{ end }}" href="{{ "blog/" | absURL }}">博客</a>
+          <a class="{{ if eq $current ("/projects/" | relURL) }}is-active{{ end }}" href="{{ "projects/" | absURL }}">项目</a>
+          <a class="{{ if eq $current ("/now/" | relURL) }}is-active{{ end }}" href="{{ "now/" | absURL }}">近况</a>
+          <a class="{{ if eq $current ("/about/" | relURL) }}is-active{{ end }}" href="{{ "about/" | absURL }}">关于</a>
+          <a class="{{ if eq $current ("/links/" | relURL) }}is-active{{ end }}" href="{{ "links/" | absURL }}">链接</a>
         </nav>
-      </div>
-    </header>
-    <main class="container">
-      {{ block "main" . }}{{ end }}
-    </main>
-    <footer class="site-footer">
-      <div class="container">
-        <p>© {{ now.Year }} {{ site.Title }}</p>
-      </div>
-    </footer>
+
+        <div class="side-util">
+          <button class="icon-btn" onclick="toggleDark()" aria-label="Toggle theme" id="theme-toggle">
+            <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      function toggleDark() {
+        var isDark = document.documentElement.getAttribute('data-dark') === 'true';
+        document.documentElement.setAttribute('data-dark', String(!isDark));
+        localStorage.setItem('diff.dark', String(!isDark));
+        updateThemeIcon();
+      }
+      function updateThemeIcon() {
+        var isDark = document.documentElement.getAttribute('data-dark') === 'true';
+        document.getElementById('icon-moon').style.display = isDark ? 'none' : 'block';
+        document.getElementById('icon-sun').style.display = isDark ? 'block' : 'none';
+      }
+      updateThemeIcon();
+    </script>
   </body>
 </html>

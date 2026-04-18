@@ -1,31 +1,25 @@
 {{ define "main" }}
   {{ $isPost := eq .Section "posts" }}
-  <article class="{{ if $isPost }}post{{ else }}page{{ end }}">
-    <header class="{{ if $isPost }}post-header{{ else }}page-header{{ end }}">
-      <p class="eyebrow">
-        {{ if $isPost }}
-          文章
-        {{ else }}
-          {{ with .Params.eyebrow }}{{ . }}{{ else }}页面{{ end }}
-        {{ end }}
-      </p>
-      <h1>{{ .Title }}</h1>
-      {{ if $isPost }}
-        <p class="post-meta">
-          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
-        </p>
-      {{ else }}
-        {{ with .Params.summary }}
-          <p class="page-copy">{{ . }}</p>
-        {{ end }}
-      {{ end }}
-    </header>
 
-    <div class="post-content">
-      {{ .Content }}
-    </div>
+  {{ if $isPost }}
+    <a class="back" href="{{ "blog/" | absURL }}">&larr; 返回</a>
 
-    {{ if $isPost }}
+    <article class="article">
+      <header class="article-header">
+        <div class="meta">
+          <span>{{ .Date.Format "2006年1月2日" }}</span>
+          {{ with .Params.tags }}
+            <span>&middot;</span>
+            <span>{{ delimit . ", " }}</span>
+          {{ end }}
+        </div>
+        <h1>{{ .Title }}</h1>
+      </header>
+
+      <div class="prose">
+        {{ .Content }}
+      </div>
+
       {{ with .Params.tags }}
         <footer class="post-tags">
           {{ range . }}
@@ -34,9 +28,31 @@
         </footer>
       {{ end }}
 
-      <p class="post-backlink">
-        <a href="{{ "blog/" | absURL }}">查看全部文章</a>
-      </p>
-    {{ end }}
-  </article>
+      <nav class="article-nav">
+        <div>
+          {{ with .PrevInSection }}
+            <a href="{{ .RelPermalink }}">
+              <div class="lbl">&larr; 上一篇</div>
+              <div class="ttl">{{ .Title }}</div>
+            </a>
+          {{ end }}
+        </div>
+        <div class="right">
+          {{ with .NextInSection }}
+            <a href="{{ .RelPermalink }}">
+              <div class="lbl">下一篇 &rarr;</div>
+              <div class="ttl">{{ .Title }}</div>
+            </a>
+          {{ end }}
+        </div>
+      </nav>
+    </article>
+  {{ else }}
+    <section class="block">
+      <h1 class="h1" style="margin-bottom: 28px;">{{ .Title }}</h1>
+    </section>
+    <div class="prose" style="padding-bottom: 48px;">
+      {{ .Content }}
+    </div>
+  {{ end }}
 {{ end }}

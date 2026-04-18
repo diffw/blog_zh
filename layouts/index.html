@@ -1,32 +1,29 @@
 {{ define "main" }}
   {{ $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse }}
-  <section class="hero">
-    <p class="eyebrow">笔记</p>
-    <h1>{{ site.Title }}</h1>
-    <p class="hero-copy">
-      记录信仰、设计、家庭与工作中的思考。这里保存着过去多年的中文文章，也会继续发布新的内容。
-    </p>
-    <div class="hero-actions">
-      <a class="primary-link" href="{{ "blog/" | absURL }}">查看全部文章</a>
-      <span class="hero-meta">{{ len $posts }} 篇文章，按年份归档</span>
+  <section class="block">
+    <h1 class="h1" style="margin-bottom: 20px;">Diff，设计师，客旅。</h1>
+    <div class="prose">
+      <p class="lede">一名产品设计师。白天在一家 SaaS 公司带设计团队，晚上写点小工具，周末在木工房里做些不赚钱的事情。</p>
+      <p class="lede">
+        这里是我过去几年的小仓库——中文旧博客的延续，记录信仰、设计、家庭与工作中的思考。
+        <a class="inline-link" href="{{ "about/" | absURL }}">关于我 &rarr;</a>
+      </p>
     </div>
   </section>
 
-  <section class="archive-block">
-    <div class="section-heading">
-      <h2>最近文章</h2>
-      <a class="text-link" href="{{ "blog/" | absURL }}">查看全部文章</a>
+  <section class="block-tight">
+    <div class="sect-hd">
+      <div class="title">最近文章</div>
+      <a href="{{ "blog/" | absURL }}">全部 &rarr;</a>
     </div>
-    <ul class="archive-list">
-      {{ range first 14 $posts }}
-        <li class="archive-item">
-          <a class="archive-link" href="{{ .RelPermalink }}">
-            <span class="archive-title">{{ .Title }}</span>
-            <span class="archive-rule" aria-hidden="true"></span>
-            <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "1月2日" }}</time>
-          </a>
-        </li>
+    <div class="post-list">
+      {{ range first 8 $posts }}
+        {{ $d := .Date }}
+        <a class="post-row" href="{{ .RelPermalink }}">
+          <span class="date">{{ $d.Format "06.01.02" }}</span>
+          <span class="title">{{ .Title }}</span>
+        </a>
       {{ end }}
-    </ul>
+    </div>
   </section>
 {{ end }}
