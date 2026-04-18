@@ -3,14 +3,14 @@
   --surface: #f3efe8;
   --surface-hover: #ece5db;
   --surface-active: #e2d7c8;
-  --text: #28221b;
+  --text: #946b45;
   --muted: #6f665d;
   --muted-soft: #9e9488;
   --line: #ddd2c2;
   --line-strong: #cabca8;
-  --link: #7b4e22;
-  --link-hover: #5f3914;
-  --link-underline: #e6d7c6;
+  --link: #ff7f83;
+  --link-hover: #e56d72;
+  --link-underline: #ffd5d8;
 }
 
 *,
