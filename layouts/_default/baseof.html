@@ -11,9 +11,10 @@
   <body>
     <header class="site-header">
       <div class="container">
-        <a class="site-title" href="{{ "/" | relURL }}">{{ site.Title }}</a>
+        <a class="site-title" href="{{ "" | absURL }}">{{ site.Title }}</a>
         <nav class="site-nav">
-          <a href="{{ "/blog/" | relURL }}">Blog</a>
+          <a href="{{ "" | absURL }}">首页</a>
+          <a href="{{ "blog/" | absURL }}">全部文章</a>
         </nav>
       </div>
     </header>

@@ -1,6 +1,7 @@
 {{ define "main" }}
   <article class="post">
     <header class="post-header">
+      <p class="eyebrow">Article</p>
       <h1>{{ .Title }}</h1>
       <p class="post-meta">
         <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
@@ -18,5 +19,9 @@
         {{ end }}
       </footer>
     {{ end }}
+
+    <p class="post-backlink">
+      <a href="{{ "blog/" | absURL }}">查看全部文章</a>
+    </p>
   </article>
 {{ end }}

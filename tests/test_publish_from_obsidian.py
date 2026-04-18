@@ -116,6 +116,39 @@ class PublishFromObsidianTests(unittest.TestCase):
             )
             self.assertIn("?? README.md", status.stdout)
 
+    def test_stage_and_commit_content_returns_false_when_content_posts_is_unchanged(self) -> None:
+        with tempfile.TemporaryDirectory() as tempdir:
+            repo = Path(tempdir) / "repo"
+            content = repo / "content" / "posts"
+            content.mkdir(parents=True)
+            (content / "_index.md").write_text("---\ntitle: \"博客\"\n---\n", encoding="utf-8")
+
+            subprocess.run(["git", "init", str(repo)], check=True, capture_output=True, text=True)
+            subprocess.run(["git", "-C", str(repo), "config", "user.email", "test@example.com"], check=True)
+            subprocess.run(["git", "-C", str(repo), "config", "user.name", "Tester"], check=True)
+            subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(repo), "commit", "-m", "init"], check=True, capture_output=True, text=True)
+
+            (repo / "README.md").write_text("local note", encoding="utf-8")
+
+            committed = stage_and_commit_content(repo, content, "Publish blog updates")
+
+            self.assertFalse(committed)
+            log = subprocess.run(
+                ["git", "-C", str(repo), "log", "--oneline", "-1"],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self.assertIn("init", log.stdout)
+            status = subprocess.run(
+                ["git", "-C", str(repo), "status", "--short"],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self.assertIn("?? README.md", status.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

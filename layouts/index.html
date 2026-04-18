@@ -1,16 +1,27 @@
 {{ define "main" }}
-  <section class="page-intro">
+  {{ $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse }}
+  <section class="hero">
+    <p class="eyebrow">Blog</p>
     <h1>{{ site.Title }}</h1>
-    <p>从 WordPress 迁移到 Hugo 的中文博客归档。</p>
+    <p class="hero-copy">
+      记录信仰、设计、家庭与工作中的思考。这里保存着过去多年的中文文章，也会继续发布新的内容。
+    </p>
+    <div class="hero-actions">
+      <a class="primary-link" href="{{ "blog/" | absURL }}">查看全部文章</a>
+      <span class="hero-meta">{{ len $posts }} 篇文章，按年份归档</span>
+    </div>
   </section>
 
-  <section class="year-group">
-    <h2>最近文章</h2>
-    <ul class="post-list">
-      {{ range first 20 (where site.RegularPages "Section" "posts").ByDate.Reverse }}
-        <li>
-          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
-          <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+  <section class="archive-block">
+    <div class="section-heading">
+      <h2>最近文章</h2>
+      <a class="text-link" href="{{ "blog/" | absURL }}">查看全部文章</a>
+    </div>
+    <ul class="archive-list">
+      {{ range first 14 $posts }}
+        <li class="archive-item">
+          <a class="archive-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "Jan 2" }}</time>
         </li>
       {{ end }}
     </ul>
