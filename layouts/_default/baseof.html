@@ -19,7 +19,7 @@
     </script>
   </head>
   <body>
-    {{ $current := .RelPermalink }}
+    {{ $permalink := .Permalink }}
     {{ $section := .Section }}
     <div class="shell">
       <main class="content fade-in">
@@ -36,11 +36,11 @@
 
         <nav class="side-nav">
           <a class="{{ if .IsHome }}is-active{{ end }}" href="{{ "" | absURL }}">首页</a>
-          <a class="{{ if or (eq $section "posts") (eq $current ("/blog/" | relURL)) }}is-active{{ end }}" href="{{ "blog/" | absURL }}">博客</a>
-          <a class="{{ if eq $current ("/projects/" | relURL) }}is-active{{ end }}" href="{{ "projects/" | absURL }}">项目</a>
-          <a class="{{ if eq $current ("/now/" | relURL) }}is-active{{ end }}" href="{{ "now/" | absURL }}">近况</a>
-          <a class="{{ if eq $current ("/about/" | relURL) }}is-active{{ end }}" href="{{ "about/" | absURL }}">关于</a>
-          <a class="{{ if eq $current ("/links/" | relURL) }}is-active{{ end }}" href="{{ "links/" | absURL }}">链接</a>
+          <a class="{{ if or (eq $section "posts") (eq $permalink ("blog/" | absURL)) }}is-active{{ end }}" href="{{ "blog/" | absURL }}">博客</a>
+          <a class="{{ if eq $permalink ("projects/" | absURL) }}is-active{{ end }}" href="{{ "projects/" | absURL }}">项目</a>
+          <a class="{{ if eq $permalink ("now/" | absURL) }}is-active{{ end }}" href="{{ "now/" | absURL }}">近况</a>
+          <a class="{{ if eq $permalink ("about/" | absURL) }}is-active{{ end }}" href="{{ "about/" | absURL }}">关于</a>
+          <a class="{{ if eq $permalink ("links/" | absURL) }}is-active{{ end }}" href="{{ "links/" | absURL }}">链接</a>
         </nav>
 
         <div class="side-util">
