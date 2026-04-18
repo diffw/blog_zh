@@ -1,6 +1,6 @@
 {{ define "main" }}
   <section class="page-intro page-intro--archive">
-    <p class="eyebrow">Tag</p>
+    <p class="eyebrow">标签</p>
     <h1>{{ .Title }}</h1>
   </section>
   <ul class="archive-list">
@@ -9,7 +9,7 @@
         <a class="archive-link" href="{{ .RelPermalink }}">
           <span class="archive-title">{{ .Title }}</span>
           <span class="archive-rule" aria-hidden="true"></span>
-          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "1月2日" }}</time>
         </a>
       </li>
     {{ end }}

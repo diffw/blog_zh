@@ -122,7 +122,7 @@ class RenderedSiteTests(unittest.TestCase):
 
         self.assertTrue(
             rendered_page.exists(),
-            f"Archive/all-posts affordance should resolve to a rendered page: {affordance['href']}",
+            f"文章归档入口应当指向一个真实生成的页面: {affordance['href']}",
         )
 
     def test_archive_or_all_posts_view_groups_posts_by_year(self) -> None:
@@ -133,7 +133,7 @@ class RenderedSiteTests(unittest.TestCase):
         self.assertGreaterEqual(
             len(set(years)),
             2,
-            "Archive/all-posts view should render at least two distinct year headings.",
+            "归档页至少应渲染两个不同的年份标题。",
         )
         self.assertEqual(years, sorted(years, reverse=True), "Year headings should render in descending order.")
 
