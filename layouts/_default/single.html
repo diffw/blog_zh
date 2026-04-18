@@ -1,27 +1,42 @@
 {{ define "main" }}
-  <article class="post">
-    <header class="post-header">
-      <p class="eyebrow">文章</p>
-      <h1>{{ .Title }}</h1>
-      <p class="post-meta">
-        <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
+  {{ $isPost := eq .Section "posts" }}
+  <article class="{{ if $isPost }}post{{ else }}page{{ end }}">
+    <header class="{{ if $isPost }}post-header{{ else }}page-header{{ end }}">
+      <p class="eyebrow">
+        {{ if $isPost }}
+          文章
+        {{ else }}
+          {{ with .Params.eyebrow }}{{ . }}{{ else }}页面{{ end }}
+        {{ end }}
       </p>
+      <h1>{{ .Title }}</h1>
+      {{ if $isPost }}
+        <p class="post-meta">
+          <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>
+        </p>
+      {{ else }}
+        {{ with .Params.summary }}
+          <p class="page-copy">{{ . }}</p>
+        {{ end }}
+      {{ end }}
     </header>
 
     <div class="post-content">
       {{ .Content }}
     </div>
 
-    {{ with .Params.tags }}
-      <footer class="post-tags">
-        {{ range . }}
-          <span class="tag">{{ . }}</span>
-        {{ end }}
-      </footer>
-    {{ end }}
+    {{ if $isPost }}
+      {{ with .Params.tags }}
+        <footer class="post-tags">
+          {{ range . }}
+            <span class="tag">{{ . }}</span>
+          {{ end }}
+        </footer>
+      {{ end }}
 
-    <p class="post-backlink">
-      <a href="{{ "blog/" | absURL }}">查看全部文章</a>
-    </p>
+      <p class="post-backlink">
+        <a href="{{ "blog/" | absURL }}">查看全部文章</a>
+      </p>
+    {{ end }}
   </article>
 {{ end }}

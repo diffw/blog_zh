@@ -14,6 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 ARCHIVE_LABEL_RE = re.compile(r"(archive|all\s*posts?)", re.IGNORECASE)
 ARCHIVE_PATH_HINTS = ("/archive", "/archives", "/all-posts")
 CHINESE_ARCHIVE_HINTS = ("归档", "全部文章", "所有文章", "文章归档", "查看全部", "更多文章")
+EXPECTED_NAV_LINKS = {
+    "首页": "/",
+    "blog": "/blog/",
+    "介绍": "/about/",
+    "Now": "/now/",
+    "项目": "/projects/",
+    "链接": "/links/",
+}
 
 
 class AnchorParser(HTMLParser):
@@ -104,6 +112,11 @@ class RenderedSiteTests(unittest.TestCase):
         )
         return candidates[0]
 
+    def parse_homepage_anchors(self) -> list[dict[str, str]]:
+        parser = AnchorParser()
+        parser.feed(self.homepage_html)
+        return parser.anchors
+
     def rendered_page_for_href(self, href: str) -> Path:
         path = normalize_href(href)
         if self.base_path and path.startswith(f"{self.base_path}/"):
@@ -116,6 +129,14 @@ class RenderedSiteTests(unittest.TestCase):
             return self.output_dir / path.lstrip("/")
         return self.output_dir / path.lstrip("/") / "index.html"
 
+    def site_relative_href(self, href: str) -> str:
+        path = normalize_href(href)
+        if self.base_path and path.startswith(f"{self.base_path}/"):
+            return path[len(self.base_path) :]
+        if self.base_path and path == f"{self.base_path}/":
+            return "/"
+        return path
+
     def test_homepage_exposes_archive_or_all_posts_affordance(self) -> None:
         affordance = self.find_archive_affordance()
         rendered_page = self.rendered_page_for_href(affordance["href"])
@@ -124,6 +145,17 @@ class RenderedSiteTests(unittest.TestCase):
             rendered_page.exists(),
             f"文章归档入口应当指向一个真实生成的页面: {affordance['href']}",
         )
+
+    def test_homepage_navigation_exposes_expected_top_level_pages(self) -> None:
+        anchors = self.parse_homepage_anchors()
+        normalized = {anchor["label"]: self.site_relative_href(anchor["href"]) for anchor in anchors if anchor["href"]}
+
+        for label, href in EXPECTED_NAV_LINKS.items():
+            self.assertIn(label, normalized, f"顶部导航缺少入口: {label}")
+            self.assertEqual(normalized[label], href)
+
+            rendered_page = self.rendered_page_for_href(href)
+            self.assertTrue(rendered_page.exists(), f"导航页面未生成: {label} -> {href}")
 
     def test_archive_or_all_posts_view_groups_posts_by_year(self) -> None:
         affordance = self.find_archive_affordance()

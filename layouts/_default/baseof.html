@@ -9,12 +9,17 @@
     <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
   </head>
   <body>
+    {{ $current := .RelPermalink }}
     <header class="site-header">
       <div class="container">
         <a class="site-title" href="{{ "" | absURL }}">{{ site.Title }}</a>
         <nav class="site-nav">
-          <a href="{{ "" | absURL }}">首页</a>
-          <a href="{{ "blog/" | absURL }}">全部文章</a>
+          <a class="{{ if eq $current ("/" | relLangURL) }}is-active{{ end }}" href="{{ "" | absURL }}">首页</a>
+          <a class="{{ if or (eq .Section "posts") (eq $current ("/blog/" | relLangURL)) }}is-active{{ end }}" href="{{ "blog/" | absURL }}">blog</a>
+          <a class="{{ if eq $current ("/about/" | relLangURL) }}is-active{{ end }}" href="{{ "about/" | absURL }}">介绍</a>
+          <a class="{{ if eq $current ("/now/" | relLangURL) }}is-active{{ end }}" href="{{ "now/" | absURL }}">Now</a>
+          <a class="{{ if eq $current ("/projects/" | relLangURL) }}is-active{{ end }}" href="{{ "projects/" | absURL }}">项目</a>
+          <a class="{{ if eq $current ("/links/" | relLangURL) }}is-active{{ end }}" href="{{ "links/" | absURL }}">链接</a>
         </nav>
       </div>
     </header>

@@ -73,6 +73,10 @@ a {
   color: var(--text);
 }
 
+.site-nav a.is-active {
+  color: var(--text);
+}
+
 .site-footer {
   margin-top: auto;
   padding: 1.5rem 0;
@@ -97,7 +101,8 @@ a {
 }
 
 .hero h1,
-.page-intro h1 {
+.page-intro h1,
+.page-header h1 {
   margin: 0;
   color: var(--text);
   font-size: 40px;
@@ -222,6 +227,10 @@ a {
 
 .post-header {
   margin-bottom: 1rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
 }
 
 .post-content h1 {
