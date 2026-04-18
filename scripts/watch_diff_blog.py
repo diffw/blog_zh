@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import signal
+import subprocess
+import sys
 import threading
 import time
 from pathlib import Path
@@ -16,8 +18,40 @@ from publish_from_obsidian import (
     DEFAULT_SOURCE_DIR,
     REPO_ROOT,
     IGNORED_FILENAMES,
-    publish_once,
 )
+
+
+PUBLISH_SCRIPT = REPO_ROOT / "scripts" / "publish_from_obsidian.py"
+
+
+def log(message: str) -> None:
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}", flush=True)
+
+
+def build_publish_command(
+    *,
+    source_dir: Path,
+    content_dir: Path,
+    repo_dir: Path,
+    commit_message: str,
+    push: bool,
+) -> list[str]:
+    command = [
+        sys.executable,
+        str(PUBLISH_SCRIPT),
+        "--source-dir",
+        str(source_dir),
+        "--content-dir",
+        str(content_dir),
+        "--repo-dir",
+        str(repo_dir),
+        "--commit-message",
+        commit_message,
+    ]
+    if not push:
+        command.append("--no-push")
+    return command
 
 
 class DebouncePublisher(FileSystemEventHandler):
@@ -53,6 +87,31 @@ class DebouncePublisher(FileSystemEventHandler):
             return None
         return path
 
+    def _publish_with_latest_script(self) -> None:
+        command = build_publish_command(
+            source_dir=self.source_dir,
+            content_dir=self.content_dir,
+            repo_dir=self.repo_dir,
+            commit_message=self.commit_message,
+            push=self.push,
+        )
+        result = subprocess.run(
+            command,
+            cwd=self.repo_dir,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        if result.stdout:
+            for line in result.stdout.splitlines():
+                log(f"[publish] {line}")
+        if result.stderr:
+            for line in result.stderr.splitlines():
+                log(f"[publish:stderr] {line}")
+        if result.returncode != 0:
+            raise RuntimeError(f"publish script exited with status {result.returncode}")
+
     def on_any_event(self, event: FileSystemEvent) -> None:
         path = self._relevant_path(event)
         if path is None:
@@ -61,7 +120,7 @@ class DebouncePublisher(FileSystemEventHandler):
         with self.lock:
             self.pending = True
             self.last_change_ts = time.monotonic()
-        print(f"[watch] detected {event.event_type}: {path.name}")
+        log(f"[watch] detected {event.event_type}: {path.name}")
 
     def loop(self) -> None:
         while not self.shutdown:
@@ -77,19 +136,11 @@ class DebouncePublisher(FileSystemEventHandler):
             if not should_publish:
                 continue
 
-            print(f"[watch] quiet for {self.debounce_seconds}s, publishing...")
+            log(f"[watch] quiet for {self.debounce_seconds}s, publishing...")
             try:
-                publish_once(
-                    source_dir=self.source_dir,
-                    content_dir=self.content_dir,
-                    repo_dir=self.repo_dir,
-                    commit_message=self.commit_message,
-                    push=self.push,
-                    dry_run=False,
-                    allow_empty=False,
-                )
+                self._publish_with_latest_script()
             except Exception as exc:
-                print(f"[watch] publish failed: {exc}")
+                log(f"[watch] publish failed: {exc}")
             finally:
                 with self.lock:
                     self.publishing = False
@@ -123,8 +174,8 @@ def main() -> int:
     observer = Observer()
     observer.schedule(handler, str(source_dir), recursive=False)
     observer.start()
-    print(f"[watch] watching {source_dir}")
-    print(f"[watch] debounce window: {args.debounce_seconds}s")
+    log(f"[watch] watching {source_dir}")
+    log(f"[watch] debounce window: {args.debounce_seconds}s")
 
     def request_shutdown(_signum: int, _frame: object) -> None:
         handler.shutdown = True
