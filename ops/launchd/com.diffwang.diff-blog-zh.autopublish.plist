@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.diffwang.diff-blog-zh.autopublish</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>/Users/diffwang/NWA/diff-blog-zh/scripts/start_autopublish.sh</string>
+      <string>--debounce-seconds</string>
+      <string>180</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/diffwang/NWA/diff-blog-zh</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/diffwang/Library/Logs/diff-blog-zh-autopublish.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/diffwang/Library/Logs/diff-blog-zh-autopublish.error.log</string>
+  </dict>
+</plist>

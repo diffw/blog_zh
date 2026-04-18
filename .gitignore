@@ -1,3 +1,8 @@
 /public
 /resources
 /.hugo_build.lock
+/.pytest_cache
+__pycache__/
+*.pyc
+*.pyo
+*.log
