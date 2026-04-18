@@ -1,15 +1,14 @@
 :root {
-  --bg: #fbfaf7;
-  --surface: #f3efe8;
-  --surface-hover: #ece5db;
-  --surface-active: #e2d7c8;
+  --bg: #fcfcfd;
+  --surface: #f9f9fb;
+  --surface-hover: #f0f0f3;
+  --surface-active: #e8e8ec;
   --text: #946b45;
-  --muted: #6f665d;
-  --muted-soft: #9e9488;
-  --line: #ddd2c2;
-  --line-strong: #cabca8;
+  --muted: #80838d;
+  --muted-soft: #b9bbc6;
+  --line: #d9d9e0;
   --link: #ff7f83;
-  --link-hover: #e56d72;
+  --link-hover: #ef6d72;
   --link-underline: #ffd5d8;
 }
 
@@ -19,20 +18,15 @@
   box-sizing: border-box;
 }
 
-html {
-  font-size: 15px;
-}
-
 body {
   margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.85), transparent 28rem),
-    var(--bg);
+  min-height: 100dvh;
+  background: var(--bg);
   color: var(--text);
-  font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-    system-ui, sans-serif;
-  line-height: 1.65;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -43,38 +37,36 @@ a {
 }
 
 .container {
-  width: min(48rem, calc(100vw - 3rem));
+  width: min(45rem, calc(100vw - 3rem));
   margin: 0 auto;
 }
 
 .site-header {
-  padding-top: 3.5rem;
+  padding-top: 4.5rem;
 }
 
 .site-header .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
 }
 
 .site-title {
   color: var(--text);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: 0.75rem;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.875rem;
 }
 
 .site-nav a {
-  transition: color 0.18s ease;
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .site-nav a:hover {
@@ -82,54 +74,52 @@ a {
 }
 
 .site-footer {
-  margin-top: 4rem;
-  padding: 1.5rem 0 2rem;
+  margin-top: auto;
+  padding: 1.5rem 0;
   color: var(--muted-soft);
-  font-size: 0.88rem;
+  font-size: 0.875rem;
 }
 
 .hero,
 .page-intro,
 .archive-block,
 .post {
-  margin-top: 4.25rem;
+  margin-top: 4rem;
 }
 
 .eyebrow {
-  margin: 0 0 0.45rem;
+  margin: 0 0 0.5rem;
   color: var(--muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .hero h1,
-.page-intro h1,
+.page-intro h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
 .post-header h1 {
   margin: 0;
   color: var(--text);
-  font-family: "Iowan Old Style", "Georgia", "Songti SC", "STSong", serif;
+  font-size: 2.25rem;
   font-weight: 700;
-  line-height: 1.08;
-}
-
-.hero h1,
-.page-intro h1 {
-  font-size: clamp(2.6rem, 5vw, 3.3rem);
-}
-
-.post-header h1 {
-  font-size: clamp(2.2rem, 4.5vw, 2.8rem);
+  line-height: 1.5;
 }
 
 .hero-copy,
 .page-copy {
-  max-width: 40rem;
-  margin: 1rem 0 0;
+  max-width: 38rem;
+  margin: 0.75rem 0 0;
   color: var(--muted);
-  font-size: 1.1rem;
-  line-height: 1.9;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 
 .hero-actions,
@@ -137,63 +127,58 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.8rem 1.5rem;
-  margin-top: 1.4rem;
+  gap: 0.75rem 1rem;
+  margin-top: 1.25rem;
 }
 
 .primary-link,
 .text-link,
-.post-backlink a {
+.post-backlink a,
+.post-content a {
   color: var(--link);
-  font-size: 0.98rem;
-  font-weight: 600;
   text-decoration-line: underline;
   text-decoration-color: var(--link-underline);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
-  transition: color 0.18s ease, text-decoration-color 0.18s ease;
+  text-underline-offset: 4px;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .primary-link:hover,
 .text-link:hover,
-.post-backlink a:hover {
+.post-backlink a:hover,
+.post-content a:hover {
   color: var(--link-hover);
-  text-decoration-color: #d8c1a4;
 }
 
 .hero-meta,
 .post-meta {
   color: var(--muted);
-  font-size: 0.96rem;
+  font-size: 1rem;
 }
 
 .section-heading {
-  margin-bottom: 0.9rem;
-}
-
-.section-heading h2,
-.year-heading {
-  margin: 0;
-  color: var(--text);
-  font-family: "Iowan Old Style", "Georgia", "Songti SC", "STSong", serif;
-  line-height: 1.15;
+  margin-bottom: 0.75rem;
 }
 
 .section-heading h2 {
-  font-size: 1.35rem;
-  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .year-heading {
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-  font-weight: 700;
+  margin: 0 0 0.75rem;
+  color: var(--text);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .archive-list {
-  list-style: none;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 
 .archive-item {
@@ -202,117 +187,104 @@ a {
 
 .archive-link {
   display: flex;
+  cursor: pointer;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.8rem 0.9rem;
-  border-radius: 0.9rem;
-  border: 1px solid transparent;
-  transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.archive-link:hover {
-  background: rgba(243, 239, 232, 0.72);
-  border-color: rgba(202, 188, 168, 0.38);
-  transform: translateX(2px);
+  justify-content: space-between;
+  border-radius: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .archive-link:active {
-  background: rgba(226, 215, 200, 0.6);
-  transform: translateX(1px);
+  transform: scale(0.995);
+  background: var(--surface-active);
 }
 
 .archive-title {
   flex-shrink: 0;
   color: var(--text);
   font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.65;
 }
 
 .archive-link time {
   flex-shrink: 0;
   color: var(--muted-soft);
-  font-size: 0.9rem;
-  letter-spacing: 0.02em;
+  font-size: 1rem;
 }
 
 .archive-rule {
   display: none;
+  height: 1px;
   width: 100%;
-  border-top: 1px solid rgba(202, 188, 168, 0.45);
+  border-top: 1px dashed var(--line);
 }
 
 .post-header {
-  margin-bottom: 1.8rem;
-}
-
-.post-content {
-  color: var(--text);
-}
-
-.post-content h1,
-.post-content h2,
-.post-content h3,
-.post-content h4 {
-  margin: 2.2rem 0 0.7rem;
-  color: var(--text);
-  font-family: "Iowan Old Style", "Georgia", "Songti SC", "STSong", serif;
-  font-weight: 700;
-  line-height: 1.35;
+  margin-bottom: 1rem;
 }
 
 .post-content h1 {
-  font-size: 2.2rem;
+  margin: 0 0 0.5rem;
+  color: var(--text);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.5;
 }
 
 .post-content h2 {
-  font-size: 1.8rem;
+  margin: 2rem 0 0.5rem;
+  color: var(--text);
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .post-content h3 {
-  font-size: 1.45rem;
+  margin: 0.5rem 0;
+  color: var(--text);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .post-content h4 {
-  font-size: 1.15rem;
+  margin: 0.5rem 0;
+  color: var(--text);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .post-content p {
-  margin: 0 0 1.4rem;
+  margin: 0 0 1.5rem;
   color: var(--text);
-  font-size: 1.08rem;
-  line-height: 1.9;
+  font-size: 1.125rem;
+  line-height: 1.625;
 }
 
-.post-content a {
-  color: var(--link);
-  text-decoration-line: underline;
-  text-decoration-color: var(--link-underline);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
-  transition: color 0.18s ease, text-decoration-color 0.18s ease;
-}
-
-.post-content a:hover {
-  color: var(--link-hover);
-  text-decoration-color: #d8c1a4;
-}
-
-.post-content ul,
-.post-content ol {
-  margin: 0.5rem 0 1.4rem;
-  padding-left: 1.45rem;
+.post-content ul {
+  margin: 0.5rem 0 1.5rem;
+  padding-left: 1rem;
   color: var(--muted);
   font-size: 1rem;
-  line-height: 1.85;
+  line-height: 1.625;
+  list-style-type: disc;
+}
+
+.post-content ol {
+  margin: 0.5rem 0 1.5rem;
+  padding-left: 1.5rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.625;
+  list-style-type: decimal;
 }
 
 .post-content li {
-  margin: 0.18rem 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.625;
 }
 
 .post-content ul li::marker,
@@ -321,15 +293,15 @@ a {
 }
 
 .post-content blockquote {
-  margin: 1.75rem 0;
-  padding: 0.25rem 0 0.25rem 1rem;
-  border-left: 3px solid var(--line-strong);
-  background: linear-gradient(90deg, rgba(243, 239, 232, 0.55), transparent);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--surface-active);
 }
 
 .post-content blockquote p {
   color: var(--muted);
   font-size: 1rem;
+  line-height: 1.625;
 }
 
 .post-content img {
@@ -337,29 +309,28 @@ a {
   height: auto;
   margin: 2rem auto;
   border: 1px solid var(--line);
-  border-radius: 1.15rem;
-  box-shadow: 0 18px 40px rgba(93, 68, 38, 0.06);
+  border-radius: 1rem;
 }
 
 .post-content code {
   margin: 0 0.125rem;
-  padding: 0.14rem 0.32rem;
-  border: 1px solid rgba(202, 188, 168, 0.55);
-  border-radius: 0.45rem;
-  background: rgba(243, 239, 232, 0.8);
-  color: #70553a;
+  padding: 0.125rem 0.25rem;
+  border: 1px solid var(--surface-active);
+  border-radius: 0.5rem;
+  background: var(--surface-hover);
+  color: var(--muted);
+  font-size: 1rem;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
-  font-size: 0.95rem;
 }
 
 .post-content pre {
+  margin: 1.5rem 0;
+  padding: 1rem;
   overflow-x: auto;
-  margin: 1.6rem 0;
-  padding: 1rem 1.1rem;
-  border: 1px solid rgba(202, 188, 168, 0.45);
-  border-radius: 0.9rem;
-  background: rgba(243, 239, 232, 0.78);
+  border: 1px solid var(--surface-active);
+  border-radius: 0.75rem;
+  background: var(--surface-hover);
 }
 
 .post-content pre code {
@@ -370,44 +341,49 @@ a {
 }
 
 .post-content hr {
-  width: 28%;
+  width: 33.333333%;
   margin: 3rem auto;
   border: 0;
-  border-top: 1px solid rgba(202, 188, 168, 0.55);
+  border-top: 1px solid var(--surface-active);
 }
 
 .post-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 1.6rem;
+  margin-top: 1.5rem;
 }
 
 .tag {
-  padding: 0.2rem 0.7rem;
-  border: 1px solid rgba(202, 188, 168, 0.45);
+  padding: 0.125rem 0.625rem;
+  border: 1px solid var(--surface-active);
   border-radius: 999px;
-  background: rgba(243, 239, 232, 0.7);
+  background: var(--surface);
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.875rem;
 }
 
 .post-backlink {
-  margin-top: 2.2rem;
+  margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(202, 188, 168, 0.38);
 }
 
 @media (min-width: 640px) {
   .archive-link {
     flex-direction: row;
     align-items: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .archive-link:hover {
+    background: var(--surface-hover);
   }
 
   .archive-rule {
     display: block;
     flex-grow: 1;
-    margin: 0 1.5rem;
+    margin: 0 2rem;
   }
 }
 
