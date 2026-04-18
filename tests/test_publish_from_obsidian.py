@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 import textwrap
 import unittest
+from unittest import mock
 from pathlib import Path
 
 
@@ -15,7 +16,7 @@ import sys
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from publish_from_obsidian import stage_and_commit_content, sync_posts
+from publish_from_obsidian import source_markdown_files, stage_and_commit_content, sync_posts
 
 
 def write_markdown(path: Path, title: str, date: str = "2026-04-18T09:00:00-05:00", draft: bool = False) -> None:
@@ -37,6 +38,29 @@ def write_markdown(path: Path, title: str, date: str = "2026-04-18T09:00:00-05:0
 
 
 class PublishFromObsidianTests(unittest.TestCase):
+    def test_source_markdown_files_retries_until_markdown_files_appear(self) -> None:
+        with tempfile.TemporaryDirectory() as tempdir:
+            source = Path(tempdir) / "source"
+            source.mkdir(parents=True)
+            delayed = source / "delayed.md"
+
+            call_count = {"value": 0}
+
+            def fake_scan_once(path: Path) -> list[Path]:
+                self.assertEqual(path, source)
+                call_count["value"] += 1
+                if call_count["value"] < 3:
+                    return []
+                return [delayed]
+
+            with mock.patch("publish_from_obsidian.source_markdown_files_once", side_effect=fake_scan_once):
+                with mock.patch("publish_from_obsidian.time.sleep") as sleep_mock:
+                    files = source_markdown_files(source, attempts=4, retry_delay_seconds=1)
+
+            self.assertEqual(files, [delayed])
+            self.assertEqual(call_count["value"], 3)
+            self.assertEqual(sleep_mock.call_count, 2)
+
     def test_sync_copies_publishable_posts_and_skips_template_and_drafts(self) -> None:
         with tempfile.TemporaryDirectory() as tempdir:
             root = Path(tempdir)

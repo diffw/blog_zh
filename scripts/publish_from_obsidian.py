@@ -7,6 +7,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -18,6 +19,8 @@ DEFAULT_SOURCE_DIR = Path(
 DEFAULT_CONTENT_DIR = REPO_ROOT / "content" / "posts"
 IGNORED_FILENAMES = {"template.md"}
 FRONT_MATTER_DELIMITER = "---"
+SOURCE_SCAN_ATTEMPTS = 5
+SOURCE_SCAN_RETRY_DELAY_SECONDS = 2
 
 
 @dataclass
@@ -101,13 +104,11 @@ def parse_source_post(path: Path) -> tuple[SourcePost | None, str | None]:
     return SourcePost(source_path=path, title=title, date=date, draft=draft), None
 
 
-def iter_source_posts(source_dir: Path) -> tuple[list[SourcePost], list[str]]:
+def iter_source_posts(source_files: list[Path]) -> tuple[list[SourcePost], list[str]]:
     posts: list[SourcePost] = []
     skipped: list[str] = []
 
-    for path in sorted(source_dir.glob("*.md")):
-        if path.name in IGNORED_FILENAMES or path.name.startswith("."):
-            continue
+    for path in source_files:
         post, error = parse_source_post(path)
         if error:
             skipped.append(error)
@@ -118,12 +119,27 @@ def iter_source_posts(source_dir: Path) -> tuple[list[SourcePost], list[str]]:
     return posts, skipped
 
 
-def source_markdown_files(source_dir: Path) -> list[Path]:
+def source_markdown_files_once(source_dir: Path) -> list[Path]:
     return [
         path
         for path in sorted(source_dir.glob("*.md"))
         if path.name not in IGNORED_FILENAMES and not path.name.startswith(".")
     ]
+
+
+def source_markdown_files(
+    source_dir: Path,
+    *,
+    attempts: int = SOURCE_SCAN_ATTEMPTS,
+    retry_delay_seconds: int = SOURCE_SCAN_RETRY_DELAY_SECONDS,
+) -> list[Path]:
+    for attempt in range(1, attempts + 1):
+        files = source_markdown_files_once(source_dir)
+        if files or attempt == attempts:
+            return files
+        time.sleep(retry_delay_seconds)
+
+    return []
 
 
 def ensure_content_index(content_dir: Path) -> None:
@@ -189,7 +205,7 @@ def sync_posts(
 
     ensure_content_index(content_dir)
     source_files = source_markdown_files(source_dir)
-    posts, skipped = iter_source_posts(source_dir)
+    posts, skipped = iter_source_posts(source_files)
 
     if not allow_empty and not posts:
         if source_files:
@@ -200,7 +216,8 @@ def sync_posts(
         existing_posts = [path for path in content_dir.glob("*.md") if path.name != "_index.md"]
         if existing_posts:
             raise RuntimeError(
-                "Refusing to clear existing content/posts because no source markdown files were found. "
+                "Refusing to clear existing content/posts because no source markdown files were found "
+                f"under {source_dir} after {SOURCE_SCAN_ATTEMPTS} scan attempts. "
                 "Pass --allow-empty if this is intentional."
             )
 
