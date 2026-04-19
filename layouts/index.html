@@ -1,8 +1,8 @@
 {{ define "main" }}
   {{ $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse }}
-  <section class="block">
+  <section class="block home-hero">
     <h1 class="h1" style="margin-bottom: 20px;">Diff，设计师，客旅。</h1>
-    <div class="prose">
+    <div class="prose home-intro">
       <p class="lede">80后，基督徒，设计师，两个孩子的爸爸。中国最早一批移动互联网设计师，曾作为第 7 号员工完整参与流利说从创业到纽交所 IPO 全过程。现居美国德州达拉斯。</p>
       <p class="lede">
         这里记录信仰、设计、家庭与工作中的思考，也是过去多年中文写作的延续。
@@ -11,7 +11,7 @@
     </div>
   </section>
 
-  <section class="block-tight">
+  <section class="block-tight home-feed">
     <div class="sect-hd">
       <div class="title">最近文章</div>
       <a href="{{ "blog/" | absURL }}">全部文章 &rarr;</a>

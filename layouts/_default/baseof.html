@@ -30,8 +30,8 @@
   <body>
     {{ $permalink := .Permalink }}
     {{ $section := .Section }}
-    <div class="shell">
-      <main class="content fade-in">
+    <div class="shell{{ if .IsHome }} home-shell{{ end }}">
+      <main class="content fade-in{{ if .IsHome }} home-content{{ end }}">
         {{ block "main" . }}{{ end }}
         <footer class="content-foot">@ 2007 - {{ now.Year }}</footer>
       </main>
