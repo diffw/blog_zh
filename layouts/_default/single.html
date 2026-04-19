@@ -2,7 +2,7 @@
   {{ $isPost := eq .Section "posts" }}
 
   {{ if $isPost }}
-    <a class="back" href="{{ "blog/" | absURL }}">&larr; 返回</a>
+    <a class="back" href="{{ "posts/" | absURL }}">&larr; 返回</a>
 
     <article class="article">
       <header class="article-header">
