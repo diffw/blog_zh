@@ -45,7 +45,7 @@
 
         <nav class="side-nav">
           <a class="{{ if .IsHome }}is-active{{ end }}" href="{{ "" | absURL }}">首页</a>
-          <a class="{{ if or (eq $section "posts") (eq $permalink ("posts/" | absURL)) }}is-active{{ end }}" href="{{ "posts/" | absURL }}">博客</a>
+          <a class="{{ if or (eq $section "posts") (eq $permalink ("blog/" | absURL)) }}is-active{{ end }}" href="{{ "blog/" | absURL }}">博客</a>
           <a class="{{ if eq $permalink ("projects/" | absURL) }}is-active{{ end }}" href="{{ "projects/" | absURL }}">项目</a>
           <a class="{{ if eq $permalink ("now/" | absURL) }}is-active{{ end }}" href="{{ "now/" | absURL }}">近况</a>
           <a class="{{ if eq $permalink ("about/" | absURL) }}is-active{{ end }}" href="{{ "about/" | absURL }}">关于</a>

@@ -16,7 +16,7 @@ ARCHIVE_PATH_HINTS = ("/archive", "/archives", "/all-posts")
 CHINESE_ARCHIVE_HINTS = ("归档", "全部文章", "所有文章", "文章归档", "查看全部", "更多文章")
 EXPECTED_NAV_LINKS = {
     "首页": "/",
-    "博客": "/posts/",
+    "博客": "/blog/",
     "关于": "/about/",
     "近况": "/now/",
     "项目": "/projects/",
@@ -24,6 +24,7 @@ EXPECTED_NAV_LINKS = {
 }
 GOOGLE_ANALYTICS_ID = "G-WRGQE6EWMX"
 GOOGLE_ANALYTICS_SRC = f"https://www.googletagmanager.com/gtag/js?id={GOOGLE_ANALYTICS_ID}"
+LEGACY_BLOG_PATH = "/posts/"
 
 
 class AnchorParser(HTMLParser):
@@ -74,7 +75,7 @@ def is_archive_label(label: str) -> bool:
 
 def is_archive_href(href: str) -> bool:
     path = normalize_href(href)
-    return path.endswith("/posts/") or any(hint in path for hint in ARCHIVE_PATH_HINTS)
+    return path.endswith("/blog/") or any(hint in path for hint in ARCHIVE_PATH_HINTS)
 
 
 class RenderedSiteTests(unittest.TestCase):
@@ -171,9 +172,11 @@ class RenderedSiteTests(unittest.TestCase):
         )
         self.assertEqual(years, sorted(years, reverse=True), "Year headings should render in descending order.")
 
-    def test_archive_page_is_available_under_posts_path(self) -> None:
-        archive_page = self.rendered_page_for_href("/posts/")
-        self.assertTrue(archive_page.exists(), "Posts archive path should resolve.")
+    def test_legacy_posts_paths_are_preserved_as_static_aliases(self) -> None:
+        archive_page = self.rendered_page_for_href(LEGACY_BLOG_PATH)
+        self.assertTrue(archive_page.exists(), "Legacy /posts/ archive path should still resolve after moving canonicals to /blog/.")
+        archive_html = archive_page.read_text(encoding="utf-8")
+        self.assertIn("https://diff.im/blog/", archive_html)
 
     def test_google_analytics_is_present_on_every_rendered_html_page(self) -> None:
         html_pages = sorted(self.output_dir.rglob("*.html"))
