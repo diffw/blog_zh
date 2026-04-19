@@ -11,7 +11,7 @@
     {{ range $pages.GroupByDate "2006" }}
       <div>
         <div class="year-head">
-          <div class="y">{{ .Key }}</div>
+          <h2 class="y">{{ .Key }}</h2>
           <div class="count">{{ len .Pages }}</div>
         </div>
         <div class="post-list">

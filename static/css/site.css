@@ -288,6 +288,7 @@ a.post-row:hover .title { color: var(--accent); }
   align-items: baseline;
 }
 .year-head .y {
+  margin: 0;
   font-size: var(--fs-xs);
   color: var(--fg-mute);
   font-family: var(--ff-mono);

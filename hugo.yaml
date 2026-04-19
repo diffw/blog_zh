@@ -14,6 +14,6 @@ frontmatter:
 
 permalinks:
   page:
-    posts: /posts/:year/:month/:slug/
+    posts: /blog/:year/:month/:slug/
   section:
-    posts: /posts/
+    posts: /blog/
