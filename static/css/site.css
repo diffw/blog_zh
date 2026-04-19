@@ -135,14 +135,6 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
   padding-bottom: 120px;
 }
 
-.home-shell {
-  max-width: 1360px;
-}
-
-.home-content {
-  max-width: 1080px;
-}
-
 .home-feed {
   max-width: var(--content-w);
 }
@@ -454,15 +446,6 @@ a.post-row:hover .title { color: var(--accent); }
 }
 
 @media (max-width: 1360px) {
-  .home-shell {
-    max-width: 1080px;
-  }
-
-  .home-content,
-  .home-feed {
-    max-width: var(--content-w);
-  }
-
   .home-intro .lede {
     white-space: normal;
   }
