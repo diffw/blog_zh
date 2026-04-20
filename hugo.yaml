@@ -1,5 +1,6 @@
 baseURL: https://diff.im/
 title: Diff客旅日志
+languageCode: zh-CN
 defaultContentLanguage: zh-cn
 timeZone: America/Chicago
 enableRobotsTXT: true
@@ -17,3 +18,8 @@ permalinks:
     posts: /blog/:year/:month/:slug/
   section:
     posts: /blog/
+
+params:
+  author:
+    name: Diff
+  description: 记录信仰、设计、家庭与工作中的思考。

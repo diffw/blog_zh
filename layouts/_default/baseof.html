@@ -2,11 +2,91 @@
 <html lang="zh-CN">
   <head>
     {{ $cssVersion := md5 (readFile "static/css/site.css") }}
+    {{ $isPost := and .IsPage (eq .Section "posts") }}
+    {{ $siteDescription := site.Params.description | default site.Title }}
+    {{ $pageTitle := site.Title }}
+    {{ if not .IsHome }}
+      {{ $pageTitle = printf "%s | %s" .Title site.Title }}
+    {{ end }}
+    {{ $descriptionSource := .Description }}
+    {{ if not $descriptionSource }}
+      {{ $descriptionSource = .Summary }}
+    {{ end }}
+    {{ if not $descriptionSource }}
+      {{ $descriptionSource = $siteDescription }}
+    {{ end }}
+    {{ $description := $descriptionSource | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace | truncate 160 }}
+    {{ $canonical := .Permalink }}
+    {{ $authorName := site.Params.author.name | default "Diff" }}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
-    <link rel="canonical" href="{{ .Permalink }}">
-    {{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
+    <title>{{ $pageTitle }}</title>
+    <link rel="canonical" href="{{ $canonical }}">
+    <meta name="description" content="{{ $description }}">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="{{ site.Title }}">
+    <meta property="og:type" content="{{ if $isPost }}article{{ else }}website{{ end }}">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:url" content="{{ $canonical }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    {{ if $isPost }}
+      <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+      <meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+      {{ with .Params.tags }}
+        {{ range . }}
+          <meta property="article:tag" content="{{ . }}">
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{ with .OutputFormats.Get "RSS" }}
+      <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}">
+    {{ end }}
+    {{ $schema := dict
+      "@context" "https://schema.org"
+      "@type" "WebSite"
+      "name" site.Title
+      "url" site.BaseURL
+      "description" $siteDescription
+      "inLanguage" "zh-CN"
+    }}
+    {{ if $isPost }}
+      {{ $schema = dict
+        "@context" "https://schema.org"
+        "@type" "BlogPosting"
+        "headline" .Title
+        "description" $description
+        "url" $canonical
+        "mainEntityOfPage" (dict "@type" "WebPage" "@id" $canonical)
+        "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+        "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+        "author" (dict "@type" "Person" "name" $authorName)
+        "publisher" (dict "@type" "Person" "name" $authorName)
+        "inLanguage" "zh-CN"
+      }}
+    {{ end }}
+    <script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
+    {{ if and .IsSection (eq .Section "posts") }}
+      {{ $legacyRedirects := readFile "data/wordpress_id_map.json" }}
+      <script>
+        (function() {
+          if (window.location.pathname !== {{ "blog/" | relURL | jsonify }}) return;
+          var params = new URLSearchParams(window.location.search);
+          var legacyId = params.get("p");
+          if (!legacyId) return;
+          var redirectMap = {{ $legacyRedirects | safeJS }};
+          var targetPath = redirectMap[legacyId];
+          if (!targetPath) return;
+          var targetUrl = new URL(targetPath, window.location.origin).toString();
+          var canonical = document.querySelector('link[rel="canonical"]');
+          if (canonical) canonical.setAttribute("href", targetUrl);
+          window.location.replace(targetUrl);
+        })();
+      </script>
+    {{ end }}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">

@@ -25,6 +25,8 @@ EXPECTED_NAV_LINKS = {
 GOOGLE_ANALYTICS_ID = "G-WRGQE6EWMX"
 GOOGLE_ANALYTICS_SRC = f"https://www.googletagmanager.com/gtag/js?id={GOOGLE_ANALYTICS_ID}"
 LEGACY_BLOG_PATH = "/posts/"
+KNOWN_WORDPRESS_ID = "1055"
+KNOWN_WORDPRESS_REDIRECT = "/blog/2020/07/买了把有点贵的人体工学椅-herman-miller-aeron/"
 
 
 class AnchorParser(HTMLParser):
@@ -194,6 +196,38 @@ class RenderedSiteTests(unittest.TestCase):
                 html,
                 f"Google Analytics config is missing from {html_page.relative_to(self.output_dir)}",
             )
+
+    def test_rendered_pages_include_canonical_links(self) -> None:
+        html_pages = sorted(self.output_dir.rglob("*.html"))
+        self.assertTrue(html_pages, "Rendered site should contain HTML pages.")
+
+        for html_page in html_pages:
+            html = html_page.read_text(encoding="utf-8")
+            self.assertRegex(
+                html,
+                r'<link rel="canonical" href="https://diff\.im/.+?"|<link rel="canonical" href="https://diff\.im/">',
+                f"Canonical link is missing from {html_page.relative_to(self.output_dir)}",
+            )
+
+    def test_post_pages_include_description_and_social_metadata(self) -> None:
+        post_pages = sorted(self.output_dir.glob("blog/*/*/*/index.html"))
+        self.assertTrue(post_pages, "Rendered site should include at least one post page.")
+
+        html = post_pages[0].read_text(encoding="utf-8")
+        self.assertIn('<meta name="description" content="', html)
+        self.assertIn('<meta property="og:type" content="article">', html)
+        self.assertIn('<meta name="twitter:card" content="summary">', html)
+        self.assertIn('"@type":"BlogPosting"', html)
+
+    def test_blog_archive_embeds_legacy_wordpress_query_redirect_map(self) -> None:
+        archive_html = self.rendered_page_for_href("/blog/").read_text(encoding="utf-8")
+        self.assertIn('legacyId = params.get("p")', archive_html)
+        self.assertIn(f'"{KNOWN_WORDPRESS_ID}":"{KNOWN_WORDPRESS_REDIRECT}"', archive_html)
+
+    def test_robots_txt_mentions_sitemap(self) -> None:
+        robots_txt = (self.output_dir / "robots.txt").read_text(encoding="utf-8")
+        self.assertIn("User-agent: *", robots_txt)
+        self.assertIn("Sitemap: https://diff.im/sitemap.xml", robots_txt)
 
 
 if __name__ == "__main__":
