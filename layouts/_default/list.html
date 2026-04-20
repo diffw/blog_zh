@@ -10,7 +10,6 @@
       <div>
         <div class="year-head">
           <h2 class="y" style="font-size: var(--fs-xl); line-height: 1.3; font-weight: 500;">{{ .Key }}</h2>
-          <div class="count">{{ len .Pages }}</div>
         </div>
         <div class="post-list">
           {{ range .Pages.ByDate.Reverse }}
