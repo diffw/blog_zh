@@ -280,7 +280,7 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
 /* ---------- Post list ---------- */
 .post-row {
   display: grid;
-  grid-template-columns: 70px 1fr;
+  grid-template-columns: 1fr auto;
   gap: 16px;
   align-items: baseline;
   padding: 10px 0;
@@ -292,6 +292,7 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
   font-family: var(--ff-mono);
   letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 .post-row .title {
   font-size: var(--fs-m);

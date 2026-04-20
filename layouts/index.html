@@ -20,8 +20,8 @@
       {{ range first 8 $posts }}
         {{ $d := .Date }}
         <a class="post-row" href="{{ .RelPermalink }}">
-          <span class="date">{{ $d.Format "06.01.02" }}</span>
           <span class="title">{{ .Title }}</span>
+          <span class="date">{{ $d.Format "06.01.02" }}</span>
         </a>
       {{ end }}
     </div>
