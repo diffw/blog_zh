@@ -427,21 +427,30 @@ a.post-row:hover .title { color: var(--accent); }
 
   .shell {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 28px var(--side) 0;
+    gap: 0;
+    padding: 0;
   }
 
   .sidebar {
-    position: static;
+    order: -1;
+    position: sticky;
+    top: 0;
+    z-index: 20;
     height: auto;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 14px;
+    padding: 14px var(--side) 12px;
     border-bottom: 1px solid var(--rule);
-    padding-bottom: 20px;
+    background: rgba(252, 252, 251, 0.94);
+    backdrop-filter: blur(14px);
     text-align: left;
+  }
+
+  [data-dark="true"] .sidebar {
+    background: rgba(18, 18, 17, 0.94);
   }
 
   .brand { order: 0; }
@@ -450,13 +459,35 @@ a.post-row:hover .title { color: var(--accent); }
   .side-nav {
     order: 2;
     flex-direction: row;
-    gap: 18px;
-    flex-wrap: wrap;
+    gap: 10px;
+    flex-wrap: nowrap;
     width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
-  .side-nav a { padding: 2px 0; font-size: var(--fs-s); }
+  .side-nav::-webkit-scrollbar { display: none; }
+  .side-nav a {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    font-size: var(--fs-s);
+    line-height: 1;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+  }
+  .side-nav a:hover {
+    background: rgba(255, 127, 131, 0.08);
+  }
   .side-nav a.is-active::after { display: none; }
-  .side-nav a.is-active { border-bottom: 1px solid var(--accent); }
+  .side-nav a.is-active {
+    color: var(--accent);
+    border-color: rgba(255, 127, 131, 0.24);
+    background: rgba(255, 127, 131, 0.12);
+  }
 
   .side-util {
     order: 1;
@@ -466,7 +497,10 @@ a.post-row:hover .title { color: var(--accent); }
     gap: 12px;
   }
 
-  .content { max-width: 100%; padding-bottom: 80px; }
+  .content {
+    max-width: 100%;
+    padding: 28px var(--side) 80px;
+  }
   .content-foot { margin-top: 80px; }
 
   .article-nav { grid-template-columns: 1fr; gap: 24px; }
