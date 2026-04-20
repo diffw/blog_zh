@@ -150,17 +150,17 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
 .module-entry {
   padding-top: 20px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .module-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid rgba(255, 127, 131, 0.35);
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 127, 131, 0.22);
   border-radius: 999px;
-  background: rgba(255, 127, 131, 0.08);
+  background: transparent;
   font-size: var(--fs-s);
   color: var(--accent);
   font-family: var(--ff-mono);
@@ -176,8 +176,7 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
 }
 
 [data-dark="true"] .module-link {
-  border-color: rgba(255, 127, 131, 0.45);
-  background: rgba(255, 127, 131, 0.14);
+  border-color: rgba(255, 127, 131, 0.3);
 }
 
 .content-foot {
