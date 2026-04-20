@@ -1,13 +1,11 @@
 {{ define "main" }}
   {{ $pages := .Pages.ByDate.Reverse }}
-  <section class="block">
-    <h1 class="h1" style="margin-bottom: 8px;">全部文章</h1>
-    <div class="mute" style="font-size: 13px;">
-      {{ len $pages }} 篇文章 &middot; 2020 &ndash; {{ now.Year }}
-    </div>
-  </section>
+  {{ partial "page_head.html" (dict
+    "title" .Title
+    "sub" (printf "%d 篇文章 · 2007 – %d" (len $pages) now.Year)
+  ) }}
 
-  <section style="padding-bottom: 48px;">
+  <section class="page-section">
     {{ range $pages.GroupByDate "2006" }}
       <div>
         <div class="year-head">

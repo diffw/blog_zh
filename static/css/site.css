@@ -135,8 +135,16 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
   padding-bottom: 120px;
 }
 
+.home-hero .h1 {
+  margin-bottom: 20px;
+}
+
 .home-feed {
   max-width: var(--content-w);
+}
+
+.home-intro .lede {
+  margin-bottom: 0;
 }
 
 .content-foot {
@@ -158,6 +166,7 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
 
 .block { padding: 0 0 48px; }
 .block-tight { padding: 24px 0; }
+.page-section { padding-bottom: 48px; }
 
 /* ---------- Prose (for page content) ---------- */
 .prose p { margin: 0 0 18px; color: var(--fg); font-size: var(--fs-m); line-height: 1.8; }
@@ -373,13 +382,19 @@ a.post-row:hover .title { color: var(--accent); }
   letter-spacing: 0.02em;
 }
 
-/* ---------- Page intro ---------- */
-.page-intro { margin-bottom: 8px; }
-.page-intro .sub {
+/* ---------- Page head ---------- */
+.page-head {
+  padding: 0 0 36px;
+}
+
+.page-head .h1 {
+  margin-bottom: 10px;
+}
+
+.page-head .sub {
   font-size: var(--fs-s);
   color: var(--fg-mute);
-  margin-top: 8px;
-  font-family: var(--ff-mono);
+  line-height: 1.7;
 }
 
 /* ---------- Fade in ---------- */
@@ -440,4 +455,3 @@ a.post-row:hover .title { color: var(--accent); }
   .article-nav { grid-template-columns: 1fr; gap: 24px; }
   .article-nav .right { text-align: left; }
 }
-

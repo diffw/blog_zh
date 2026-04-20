@@ -48,10 +48,11 @@
       </nav>
     </article>
   {{ else }}
-    <section class="block">
-      <h1 class="h1" style="margin-bottom: 28px;">{{ .Title }}</h1>
-    </section>
-    <div class="prose" style="padding-bottom: 48px;">
+    {{ partial "page_head.html" (dict
+      "title" .Title
+      "sub" .Description
+    ) }}
+    <div class="prose page-section">
       {{ .Content }}
     </div>
   {{ end }}
