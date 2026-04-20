@@ -27,6 +27,10 @@ GOOGLE_ANALYTICS_SRC = f"https://www.googletagmanager.com/gtag/js?id={GOOGLE_ANA
 LEGACY_BLOG_PATH = "/posts/"
 KNOWN_WORDPRESS_ID = "1055"
 KNOWN_WORDPRESS_REDIRECT = "/blog/2020/07/买了把有点贵的人体工学椅-herman-miller-aeron/"
+KNOWN_WORDPRESS_PAGE_ID = "1371"
+KNOWN_WORDPRESS_PAGE_REDIRECT = "/about/"
+KNOWN_WORDPRESS_ATTACHMENT_ID = "775"
+KNOWN_WORDPRESS_ATTACHMENT_REDIRECT = "/blog/2019/02/读书-富能仁传/"
 
 
 class AnchorParser(HTMLParser):
@@ -223,8 +227,12 @@ class RenderedSiteTests(unittest.TestCase):
     def test_blog_archive_embeds_legacy_wordpress_query_redirect_map(self) -> None:
         archive_html = self.rendered_page_for_href("/blog/").read_text(encoding="utf-8")
         self.assertIn("window.location.pathname !== '/blog/'", archive_html)
-        self.assertIn('legacyId = params.get("p")', archive_html)
+        self.assertIn('legacyPostId = params.get("p")', archive_html)
+        self.assertIn('legacyPageId = params.get("page_id")', archive_html)
+        self.assertIn('legacyAttachmentId = params.get("attachment_id")', archive_html)
         self.assertIn(f'"{KNOWN_WORDPRESS_ID}":"{KNOWN_WORDPRESS_REDIRECT}"', archive_html)
+        self.assertIn(f'"{KNOWN_WORDPRESS_PAGE_ID}":"{KNOWN_WORDPRESS_PAGE_REDIRECT}"', archive_html)
+        self.assertIn(f'"{KNOWN_WORDPRESS_ATTACHMENT_ID}":"{KNOWN_WORDPRESS_ATTACHMENT_REDIRECT}"', archive_html)
 
     def test_robots_txt_mentions_sitemap(self) -> None:
         robots_txt = (self.output_dir / "robots.txt").read_text(encoding="utf-8")

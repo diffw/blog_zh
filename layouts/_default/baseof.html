@@ -75,15 +75,27 @@
     {{ end }}
     <script type="application/ld+json">{{ $schema | jsonify | safeJS }}</script>
     {{ if and .IsSection (eq .Section "posts") }}
-      {{ $legacyRedirects := readFile "data/wordpress_id_map.json" }}
+      {{ $legacyPostRedirects := readFile "data/wordpress_id_map.json" }}
+      {{ $legacyPageRedirects := readFile "data/wordpress_page_id_map.json" }}
+      {{ $legacyAttachmentRedirects := readFile "data/wordpress_attachment_id_map.json" }}
       <script>
         (function() {
           if (window.location.pathname !== '/blog/') return;
           var params = new URLSearchParams(window.location.search);
-          var legacyId = params.get("p");
-          if (!legacyId) return;
-          var redirectMap = {{ $legacyRedirects | safeJS }};
-          var targetPath = redirectMap[legacyId];
+          var legacyPostId = params.get("p");
+          var legacyPageId = params.get("page_id");
+          var legacyAttachmentId = params.get("attachment_id");
+          var postRedirects = {{ $legacyPostRedirects | safeJS }};
+          var pageRedirects = {{ $legacyPageRedirects | safeJS }};
+          var attachmentRedirects = {{ $legacyAttachmentRedirects | safeJS }};
+          var targetPath = null;
+          if (legacyPostId) {
+            targetPath = postRedirects[legacyPostId];
+          } else if (legacyPageId) {
+            targetPath = pageRedirects[legacyPageId];
+          } else if (legacyAttachmentId) {
+            targetPath = attachmentRedirects[legacyAttachmentId];
+          }
           if (!targetPath) return;
           var targetUrl = new URL(targetPath, window.location.origin).toString();
           var canonical = document.querySelector('link[rel="canonical"]');
