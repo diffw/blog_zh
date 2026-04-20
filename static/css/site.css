@@ -148,21 +148,36 @@ h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 500; letter-spacing: -0.01em; }
 }
 
 .module-entry {
-  padding-top: 16px;
+  padding-top: 20px;
   display: flex;
   justify-content: flex-end;
 }
 
 .module-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 127, 131, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 127, 131, 0.08);
   font-size: var(--fs-s);
-  color: var(--fg-mute);
+  color: var(--accent);
   font-family: var(--ff-mono);
   letter-spacing: 0.02em;
-  transition: color .15s var(--easing);
+  transition: color .15s var(--easing), background-color .15s var(--easing), border-color .15s var(--easing), transform .15s var(--easing);
 }
 
 .module-link:hover {
-  color: var(--fg);
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: translateX(2px);
+}
+
+[data-dark="true"] .module-link {
+  border-color: rgba(255, 127, 131, 0.45);
+  background: rgba(255, 127, 131, 0.14);
 }
 
 .content-foot {
