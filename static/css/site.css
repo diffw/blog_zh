@@ -309,7 +309,9 @@ a.post-row:hover .title { color: var(--accent); }
 }
 .year-head .y {
   margin: 0;
-  font-size: var(--fs-s);
+  font-size: var(--fs-xl);
+  line-height: 1.3;
+  font-weight: 500;
   color: var(--fg);
   font-family: var(--ff-mono);
   letter-spacing: 0.02em;
