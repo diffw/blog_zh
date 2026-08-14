@@ -251,6 +251,10 @@ class RenderedSiteTests(unittest.TestCase):
         posts_idx = self.homepage_html.index("最近文章")
 
         self.assertLess(projects_idx, posts_idx)
+        self.assertIn("RXlingo", self.homepage_html)
+        self.assertIn("把刷 X，变成学英语。", self.homepage_html)
+        self.assertIn("https://rxlingo.com/", self.homepage_html)
+        self.assertLess(self.homepage_html.index("RXlingo"), self.homepage_html.index("VibeCap - Screenshot for AI"))
         self.assertIn("VibeCap - Screenshot for AI", self.homepage_html)
         self.assertIn("Bible 2460 - Verse Clock", self.homepage_html)
         self.assertIn("截图、标注，然后直接粘贴到 AI。", self.homepage_html)
@@ -260,10 +264,24 @@ class RenderedSiteTests(unittest.TestCase):
         projects_html = self.rendered_page_for_href("/projects/").read_text(encoding="utf-8")
 
         self.assertIn('class="project-list"', projects_html)
+        self.assertIn("RXlingo", projects_html)
+        self.assertIn("把刷 X，变成学英语。", projects_html)
+        self.assertIn("https://rxlingo.com/", projects_html)
+        self.assertLess(projects_html.index("RXlingo"), projects_html.index("VibeCap - Screenshot for AI"))
         self.assertIn("VibeCap - Screenshot for AI", projects_html)
         self.assertIn("Bible 2460 - Verse Clock", projects_html)
         self.assertIn("https://vibecap.dev/", projects_html)
         self.assertIn("https://bible2460.com/", projects_html)
+
+    def test_rxlingo_localizes_on_english_pages(self) -> None:
+        english_homepage_html = (self.output_dir / "en" / "index.html").read_text(encoding="utf-8")
+        english_projects_html = self.rendered_page_for_href("/en/projects/").read_text(encoding="utf-8")
+
+        for page_html in (english_homepage_html, english_projects_html):
+            self.assertIn("RXlingo", page_html)
+            self.assertIn("Learn English on X", page_html)
+            self.assertIn("https://rxlingo.com/", page_html)
+            self.assertNotIn("把刷 X，变成学英语。", page_html)
 
     def test_archive_or_all_posts_view_groups_posts_by_year(self) -> None:
         affordance = self.find_archive_affordance()

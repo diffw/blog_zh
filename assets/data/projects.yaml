@@ -1,3 +1,9 @@
+- name: RXlingo
+  url: https://rxlingo.com/
+  icon: /images/projects/rxlingo.jpg
+  intro:
+    zh-cn: 把刷 X，变成学英语。
+    en: Learn English on X
 - name: VibeCap - Screenshot for AI
   url: https://vibecap.dev/
   icon: /images/projects/vibecap.png
